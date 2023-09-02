@@ -1,4 +1,5 @@
 '''
+python语法作业1-3 all
 编写学员实体类 Student，对应成员变量包含：学号 id、姓名 name、性别 sex；
 编写学员管理类 StudentManagement ，实现添加学员方法 addStudent()。
 编写StudentManagement的main()方法进行学员信息的添加：
