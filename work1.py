@@ -35,13 +35,15 @@ class StudentManagement:
     @classmethod
     def deleteStudent(cls,id):
         '''删除学员'''
-        for stu in cls.stu_list:
-            try:
+        try:
+            for stu in cls.stu_list:
                 if stu["id"] == id:
                     cls.stu_list.remove(stu)
-                    print(f"学号为{stu['id']}的学生信息已删除")
-            except:
-                raise MyException("输入学号信息有误")
+                    print(f"删除成功，删除的学员信息为：学号：{stu['id']}，姓名：{stu['name']}，性别：{stu['sex']}")
+            print("删除后的学员信息为：")
+            StudentManagement.printStudent()
+        except:
+            raise MyException("输入学号信息有误")
 
     @classmethod
     def findStudengt(cls,id):
@@ -70,8 +72,10 @@ class MyException(Exception):
 
 
 if __name__=="__main__":
-    while input("是否继续选择学生信息功能 y|n：")=="y":
-        order_num = input("请根据编号选择对应功能\n1.根据学号查看学员信息\n2.添加学员\n3.查看所有学员信息\n请输入对应编号：")
+    print("-----------------欢迎来到学员信息管理系统-------------------")
+    print("   1.根据学号查看学员信息\n   2.添加学员\n   3.根据学号删除学员后，查看所有学员信息\n   4.查询所有学员信息\n   5.退出系统")
+    while input("是否继续输入命令编号 y|n：")=="y":
+        order_num = input("请输入你的选择：")
         if order_num == "1":
             target_id = input("请输入要查询的学生学号：")
             StudentManagement.findStudengt(target_id)
@@ -82,6 +86,12 @@ if __name__=="__main__":
                 sex = input("请输入性别：")
                 stu_list =StudentManagement.addStudent(id=id, name=name, sex=sex)
         elif order_num == "3":
+            del_stu_id = input("请输入要删除的学生学号：")
+            StudentManagement.deleteStudent(del_stu_id)
+        elif order_num == "4":
             StudentManagement.printStudent()
+        elif order_num == "5":
+            print("成功退出系统，欢迎下次使用")
+            break
         else:
             print("输入的命令编号无效，请重新输入")
