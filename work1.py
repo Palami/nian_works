@@ -18,29 +18,70 @@ class Student:
         self.name = name
         self.sex = sex
 
-class StudentManagement(Student):
-    def __init__(self, id, name, sex, stu_list):
-        super().__init__(id, name, sex)
-        self.stu_list = stu_list
 
-    def addStudent(self, **stu_dic):
+class StudentManagement:
+
+    stu_list = []
+
+    @classmethod
+    def addStudent(cls, **stu_dic):
         '''添加学员'''
-        self.stu_dic = stu_dic
-        self.stu_list.append(self.stu_dic)
-        return self.stu_list
+        try:
+            cls.stu_list.append(stu_dic)
+            return cls.stu_list
+        except:
+            raise MyException("添加学生信息输入不合理")
 
-    def deleteStudent(self):
+    @classmethod
+    def deleteStudent(cls,id):
         '''删除学员'''
-        pass
+        for stu in cls.stu_list:
+            try:
+                if stu["id"] == id:
+                    cls.stu_list.remove(stu)
+                    print(f"学号为{stu['id']}的学生信息已删除")
+            except:
+                raise MyException("输入学号信息有误")
+
+    @classmethod
+    def findStudengt(cls,id):
+        '''查询学员信息'''
+        if len(cls.stu_list) != 0:
+            for stu in cls.stu_list:
+                if stu["id"] == id:
+                    print(f"学号：{stu['id']}，姓名：{stu['name']}，性别：{stu['sex']}")
+        else:
+            print("输入学号不存在")
+
+    @classmethod
+    def printStudent(cls):
+        if len(cls.stu_list) != 0:
+            for s in cls.stu_list:
+                print(f"学号：{s['id']}，姓名：{s['name']}，性别：{s['sex']}")
+        else:
+            print("学生列表为空，请先添加学员信息")
+
+class MyException(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        repr(self.msg)
 
 
 if __name__=="__main__":
-    stu_list = []
-    while input("是否继续录入学生信息 y|n：")=="y":
-        id = input("请输入学号：")
-        name = input("请输入姓名：")
-        sex = input("请输入性别：")
-        student = StudentManagement(id, name, sex, stu_list)
-        stu_list =student.addStudent(id=student.id, name=student.name, sex=student.sex)
-    for s in stu_list:
-        print(f"学号：{s['id']}，姓名：{s['name']}，性别：{s['sex']}")
+    while input("是否继续选择学生信息功能 y|n：")=="y":
+        order_num = input("请根据编号选择对应功能\n1.根据学号查看学员信息\n2.添加学员\n3.查看所有学员信息\n请输入对应编号：")
+        if order_num == "1":
+            target_id = input("请输入要查询的学生学号：")
+            StudentManagement.findStudengt(target_id)
+        elif order_num == "2":
+            while input("是否继续录入学生信息 y|n：")=="y":
+                id = input("请输入学号：")
+                name = input("请输入姓名：")
+                sex = input("请输入性别：")
+                stu_list =StudentManagement.addStudent(id=id, name=name, sex=sex)
+        elif order_num == "3":
+            StudentManagement.printStudent()
+        else:
+            print("输入的命令编号无效，请重新输入")
